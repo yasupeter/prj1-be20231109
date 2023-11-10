@@ -1,34 +1,37 @@
-package com.example.prj1be20231109.controller;
+package com.example.prj1be20231109.service;
 
 import com.example.prj1be20231109.domain.Board;
-import com.example.prj1be20231109.service.BoardService;
+import com.example.prj1be20231109.mapper.BoardMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
-@RestController
+@Service
 @RequiredArgsConstructor
-@RequestMapping("/api/board")
-public class BoardController {
+public class BoardService {
 
-    private final BoardService service;
+    private final BoardMapper mapper;
 
-    @PostMapping("add")
-    public ResponseEntity add(@RequestBody Board board) {
-        if (service.save(board)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.internalServerError().build();
+    public boolean save(Board board) {
+        return mapper.insert(board) == 1;
+    }
+
+    public boolean validate(Board board) {
+        if (board == null) {
+            return false;
         }
+
+        if (board.getContent() == null || board.getContent().isBlank()) {
+            return false;
+        }
+
+        if (board.getTitle() == null || board.getTitle().isBlank()) {
+            return false;
+        }
+
+        if (board.getWriter() == null || board.getWriter().isBlank()) {
+            return false;
+        }
+
+        return true;
     }
 }
-
-
-
-
-
-
-
