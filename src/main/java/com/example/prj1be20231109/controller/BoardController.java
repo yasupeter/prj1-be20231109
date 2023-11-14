@@ -19,14 +19,10 @@ public class BoardController {
     private final BoardService service;
 
     @PostMapping("add")
-    public ResponseEntity add(@RequestBody Board board, HttpSession session) {
-
-        Object login = session.getAttribute("login");
-
-        Member loginMember = (Member) login;
+    public ResponseEntity add(@RequestBody Board board,
+                              @SessionAttribute(value = "login", required = false) Member login) {
 
         System.out.println("login = " + login);
-        System.out.println("loginMember = " + loginMember);
 
         if (!service.validate(board)) {
             return ResponseEntity.badRequest().build();
