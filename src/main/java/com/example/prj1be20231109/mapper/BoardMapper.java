@@ -20,9 +20,11 @@ public interface BoardMapper {
                b.writer,
                m.nickName,
                b.inserted,
-               COUNT(c.id) countComment
+               COUNT(DISTINCT c.id) countComment,
+               COUNT(DISTINCT l.id) countLike
         FROM board b JOIN member m ON b.writer = m.id
-                     LEFT JOIN comment c on b.id = c.boardId
+                     LEFT JOIN comment c ON b.id = c.boardId
+                     LEFT JOIN boardLike l ON b.id = l.boardId
         GROUP BY b.id
         ORDER BY b.id DESC
         """)
